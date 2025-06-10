@@ -11,10 +11,12 @@ Track the progress of implementing the Gradio Modal GCP Speech UI project.
 - [x] Add `.gitignore` for Python projects
 - [x] Create environment configuration templates (`.env.example`)
 - [x] Add `pyproject.toml` for modern Python project management
-- [x] Create setup script (`setup.sh`) and Makefile for development
+- [x] Create setup script (`setup.sh`) for development
 - [x] Add basic configuration modules with settings management
+- [x] Create GCPConfig class skeleton (detailed implementation in separate commit)
 - [x] Create placeholder package structure with `__init__.py` files
 - [x] Add basic test structure and configuration
+- [x] User customization: Updated author name to "Manoj T"
 
 ### 🔄 Commit 2: Google Cloud Setup Documentation & Configuration (NEXT)
 - [ ] Create detailed GCP setup guide (`docs/gcp-setup.md`)
