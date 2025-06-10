@@ -1,0 +1,33 @@
+# Core Dependencies
+gradio>=4.0.0
+modal>=0.60.0
+
+# Google Cloud Speech-to-Text
+google-cloud-speech>=2.0.0
+google-cloud-storage>=2.0.0
+google-auth>=2.0.0
+
+# Audio Processing
+pydub>=0.25.0
+librosa>=0.10.0
+soundfile>=0.12.0
+mutagen>=1.47.0
+
+# Utilities
+python-dotenv>=1.0.0
+pydantic>=2.0.0
+structlog>=23.0.0
+rich>=13.0.0
+
+# Development Dependencies
+pytest>=7.0.0
+pytest-asyncio>=0.21.0
+black>=23.0.0
+isort>=5.12.0
+flake8>=6.0.0
+mypy>=1.5.0
+
+# Optional: Future HuggingFace Integration
+# transformers>=4.30.0
+# torch>=2.0.0
+# datasets>=2.14.0
