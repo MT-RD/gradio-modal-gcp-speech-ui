@@ -1,6 +1,6 @@
 # Makefile for Gradio Modal GCP Speech UI
 
-.PHONY: help setup install check-env
+.PHONY: help setup install check-env test lint format
 
 # Default target
 help:
@@ -34,7 +34,7 @@ setup:
 # Install dependencies
 install:
 	@echo "📦 Installing dependencies..."
-	@pip install -r requirements.txt
+	@pip3 install -r requirements.txt
 
 # Check environment configuration
 check-env:
@@ -46,11 +46,24 @@ check-env:
 	@echo "✅ .env file found"
 	@python -c "from config.settings import settings; print('✅ Configuration loaded successfully')" || echo "❌ Configuration error"
 
-# TODO: Add testing and quality commands (test, lint, format)
-# TODO: Add utility commands (clean)
-# TODO: Add development and deployment commands (dev, deploy-modal)
-# TODO: Add environment validation commands (check-env)
+# Run tests
+test:
+	@echo "🧪 Running tests..."
+	@pytest tests/ -v --cov=src --cov-report=term-missing --cov-report=html
 
-# Skeleton ready for incremental implementation
-skeleton:
-	@echo "🔧 Makefile skeleton ready for incremental implementation..."
+# Format code
+format:
+	@echo "🎨 Formatting code..."
+	@black src/ tests/ config/
+	@isort src/ tests/ config/
+	@echo "✅ Code formatted"
+
+# Lint code
+lint:
+	@echo "🔍 Linting code..."
+	@flake8 src/ tests/ config/
+	@mypy src/ config/
+	@echo "✅ Linting complete"
+
+# TODO: Add utility commands (clean)
+# TODO: Add development and deployment commands (run, dev, deploy-modal, deploy-hf)
