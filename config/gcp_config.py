@@ -50,6 +50,29 @@ class GCPConfig:
         },
     }
     
-    # TODO: Add Supported language codes
+    # Supported language codes
+    SUPPORTED_LANGUAGES = {
+        "en-US": "English (United States)",
+        "en-GB": "English (United Kingdom)",
+        "es-ES": "Spanish (Spain)",
+        "es-US": "Spanish (United States)",
+        "fr-FR": "French (France)",
+        "de-DE": "German (Germany)",
+        "it-IT": "Italian (Italy)",
+        "pt-BR": "Portuguese (Brazil)",
+        "ja-JP": "Japanese (Japan)",
+        "ko-KR": "Korean (South Korea)",
+        "zh-CN": "Chinese (Simplified)",
+        "hi-IN": "Hindi (India)",
+        "ar-SA": "Arabic (Saudi Arabia)",
+        "ru-RU": "Russian (Russia)",
+        "nl-NL": "Dutch (Netherlands)",
+        "sv-SE": "Swedish (Sweden)",
+        "da-DK": "Danish (Denmark)",
+        "no-NO": "Norwegian (Norway)",
+        "fi-FI": "Finnish (Finland)",
+        "pl-PL": "Polish (Poland)",
+    }
+    
     # TODO: Add class methods for configuration handling
     # TODO: Add file size and duration limits
