@@ -37,8 +37,7 @@ def create_speech_interface() -> gr.Interface:
             gr.Textbox(
                 label="📝 Transcription Result",
                 placeholder="Your transcribed text will appear here...",
-                lines=5,
-                show_copy_button=True
+                lines=5
             )
         ],
         title="🎙️ Speech-to-Text UI",
@@ -49,12 +48,10 @@ def create_speech_interface() -> gr.Interface:
         
         **Supported formats:** WAV, MP3, M4A, OGG, FLAC
         """,
-        theme=gr.themes.Soft(),
+        theme=gr.themes.Soft() if hasattr(gr, 'themes') else None,
         examples=[
             # We'll add example audio files later
-        ],
-        cache_examples=False,
-        flagging_mode="never"
+        ]
     )
     
     return interface
