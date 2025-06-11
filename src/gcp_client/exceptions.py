@@ -47,7 +47,8 @@ class UnsupportedFormatError(GCPSpeechError):
 class QuotaExceededError(GCPSpeechError):
     """Raised when GCP API quota is exceeded."""
     
-    pass
+    def __init__(self, message: str = "Google Cloud API quota exceeded"):
+        super().__init__(message, "QUOTA_ERROR")
 
 class TranscriptionError(GCPSpeechError):
     """Raised when transcription fails."""
