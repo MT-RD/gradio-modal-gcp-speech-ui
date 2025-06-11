@@ -74,5 +74,36 @@ class GCPConfig:
         "pl-PL": "Polish (Poland)",
     }
     
-    # TODO: Add class methods for configuration handling
+    @classmethod
+    def get_config_for_format(cls, audio_format: str) -> Dict[str, Any]:
+        """
+        Get Speech-to-Text configuration for a specific audio format.
+        
+        Args:
+            audio_format: The audio file format (e.g., 'wav', 'mp3')
+            
+        Returns:
+            Dictionary containing the configuration for the format
+        """
+        base_config = cls.SPEECH_CONFIG.copy()
+        format_config = cls.FORMAT_CONFIGS.get(audio_format.lower(), {})
+        
+        # Update base config with format-specific settings
+        base_config.update(format_config)
+        
+        return base_config
+    
+    @classmethod
+    def get_supported_languages(cls) -> List[Dict[str, str]]:
+        """
+        Get list of supported languages for the UI.
+        
+        Returns:
+            List of dictionaries with 'code' and 'name' keys
+        """
+        return [
+            {"code": code, "name": name}
+            for code, name in cls.SUPPORTED_LANGUAGES.items()
+        ]
+    
     # TODO: Add file size and duration limits
