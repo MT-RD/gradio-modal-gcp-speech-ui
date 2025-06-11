@@ -23,7 +23,22 @@ fi
 
 echo "✅ Python $PYTHON_VERSION detected"
 
-# TODO: Add virtual environment setup
+# Create virtual environment if it doesn't exist
+if [ ! -d "venv" ]; then
+    echo "📦 Creating virtual environment..."
+    python3 -m venv venv
+else
+    echo "✅ Virtual environment already exists"
+fi
+
+# Activate virtual environment
+echo "🔄 Activating virtual environment..."
+source venv/bin/activate
+
+# Upgrade pip
+echo "⬆️ Upgrading pip..."
+pip install --upgrade pip
+
 # TODO: Add dependencies installation
 # TODO: Add environment file setup
 # TODO: Add FFmpeg check and completion message
