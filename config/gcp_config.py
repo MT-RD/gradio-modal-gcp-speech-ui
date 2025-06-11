@@ -106,4 +106,10 @@ class GCPConfig:
             for code, name in cls.SUPPORTED_LANGUAGES.items()
         ]
     
-    # TODO: Add file size and duration limits
+    # File size and duration limits
+    MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024  # 10 MB for short audio
+    MAX_AUDIO_DURATION_SECONDS = 480  # 8 minutes for synchronous recognition
+    
+    # For longer files, we'll need to use asynchronous recognition
+    ASYNC_RECOGNITION_THRESHOLD_SECONDS = 60  # 1 minute
+    ASYNC_MAX_DURATION_SECONDS = 28800  # 8 hours
