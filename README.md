@@ -4,13 +4,26 @@ A modern, user-friendly web interface for transcribing speech from audio files u
 
 ## 🚀 Features
 
+### ✅ Currently Implemented
 - **Drag-and-drop audio file upload** via clean Gradio interface
-- **Multiple audio format support** (WAV, MP3, M4A, FLAC, etc.)
-- **Serverless processing** with Modal for scalable transcription
+- **Multiple audio format support** (WAV, MP3, M4A, OGG, FLAC, AAC, WMA)
+- **File validation system** with format and size checking (100MB limit)
+- **Audio preview functionality** with built-in player
+- **Detailed file information display** (name, size, format, upload time)
+- **Enhanced error handling** with troubleshooting guidance
+- **Professional UI/UX** with welcome messages and status indicators
+
+### 🚧 In Development
 - **Google Cloud Speech-to-Text** integration for accurate transcription
+- **Serverless processing** with Modal for scalable transcription
+- **Real-time progress tracking** during transcription
+
+### 🎯 Planned Features
 - **Multiple deployment options**: Local, Modal Web, and HuggingFace Spaces
-- **Real-time progress tracking** and error handling
-- **Modern, responsive UI** with audio preview capabilities
+- **Language selection interface** with 50+ supported languages
+- **Batch processing capabilities** for multiple files
+- **Transcription export** (TXT, JSON, SRT formats)
+- **Audio duration detection** and advanced file analysis
 
 ## 🏗️ Architecture
 
@@ -97,44 +110,87 @@ cp .env.example .env
 
 ## 🚀 Usage
 
-### Local Development
+### Current Local Development (Step 2 - UI Ready)
 
 ```bash
-# Run the Gradio app locally
-python src/gradio_app/app.py
+# Quick start with automated setup
+./setup.sh
+
+# Or manual setup:
+# 1. Create virtual environment
+python -m venv venv
+source venv/bin/activate
+
+# 2. Install dependencies
+make install
+
+# 3. Run the application
+make run
+# Application will be available at http://127.0.0.1:7860
+
+# For development mode with auto-reload
+make dev
 ```
 
-### Modal Deployment
+### Testing Current Features
+
+1. **Upload Audio Files**: Test with WAV, MP3, M4A, OGG, FLAC, AAC, or WMA files
+2. **File Validation**: Try invalid formats or large files (>100MB) to see error handling
+3. **Audio Preview**: Use the built-in player to preview uploaded audio
+4. **File Information**: View detailed file metadata and processing status
+
+### Future Usage (After GCP Integration)
 
 ```bash
-# Deploy to Modal
+# Configure environment
+cp .env.example .env
+# Edit .env with your GCP credentials
+
+# Deploy to Modal (Step 4)
 modal deploy src/modal_functions/speech_processor.py
+
+# Deploy to HuggingFace Spaces (Step 4)
+# See docs/setup/huggingface-deployment.md
 ```
-
-### HuggingFace Spaces
-
-See [`docs/setup/huggingface-deployment.md`](docs/setup/huggingface-deployment.md) for deployment instructions.
 
 ## 📊 Supported Audio Formats
 
-- WAV (recommended)
-- MP3
-- M4A
-- FLAC
-- OGG
-- WEBM (audio)
+- **WAV** (recommended for best quality)
+- **MP3** (most common format)
+- **M4A** (Apple audio format)
+- **OGG** (open source format)
+- **FLAC** (lossless compression)
+- **AAC** (Advanced Audio Coding)
+- **WMA** (Windows Media Audio)
+
+**File Size Limit**: 100MB per file  
+**Validation**: Automatic format and size checking with detailed error messages
 
 ## 🎯 Roadmap
 
-- [x] Basic Gradio interface
-- [x] Modal backend integration
-- [x] Google Cloud STT integration
-- [x] Multi-format audio support
+### ✅ Completed (Phase 1-2)
+- [x] Project structure and build system
+- [x] Comprehensive configuration management  
+- [x] Basic Gradio interface with audio upload
+- [x] File validation and error handling
+- [x] Audio preview and file information display
+- [x] Enhanced UI/UX with professional feedback
+
+### 🚧 In Progress (Phase 3)
+- [ ] Google Cloud STT integration
+- [ ] Audio processing pipeline
+- [ ] Real transcription functionality
+
+### 📋 Planned (Phase 4-5)
+- [ ] Modal backend integration and deployment
+- [ ] HuggingFace Spaces deployment
+- [ ] Language selection interface (50+ languages)
+- [ ] Audio duration detection with librosa
+- [ ] Batch processing capabilities
+- [ ] Transcription export (TXT, JSON, SRT)
 - [ ] HuggingFace ASR model comparison
 - [ ] LLM-powered transcription post-processing
-- [ ] Batch processing capabilities
 - [ ] Real-time streaming transcription
-- [ ] Multi-language support
 - [ ] Custom vocabulary support
 
 ## 🤝 Contributing
