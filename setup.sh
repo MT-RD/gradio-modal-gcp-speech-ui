@@ -43,7 +43,15 @@ pip3 install --upgrade pip
 echo "📚 Installing dependencies..."
 pip3 install -r requirements.txt
 
-# TODO: Add environment file setup
+# Create .env file from template if it doesn't exist
+if [ ! -f ".env" ]; then
+    echo "⚙️ Creating .env file from template..."
+    cp .env.example .env
+    echo "📝 Please edit .env file with your actual configuration values"
+else
+    echo "✅ .env file already exists"
+fi
+
 # TODO: Add FFmpeg check and completion message
 
 echo "🔧 Setup script skeleton ready for incremental implementation..."
