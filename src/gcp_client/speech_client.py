@@ -6,8 +6,10 @@ Google Cloud Speech-to-Text API.
 """
 
 import os
+import json
 import logging
 from typing import Dict, Any, Optional
+from pathlib import Path
 
 from .audio_processor import AudioProcessor
 from .exceptions import GCPSpeechError, AuthenticationError
