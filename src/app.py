@@ -21,13 +21,7 @@ def main():
     interface = create_speech_interface()
     
     # Launch the application
-    interface.launch(
-        server_name="0.0.0.0",  # Allow external connections
-        server_port=7860,       # Default Gradio port
-        share=False,            # Set to True for public sharing
-        debug=True,             # Enable debug mode
-        show_error=True         # Show detailed error messages
-    )
+    interface.launch()
 
 if __name__ == "__main__":
     main()
