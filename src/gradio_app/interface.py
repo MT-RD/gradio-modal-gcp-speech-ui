@@ -82,27 +82,36 @@ def process_speech_with_validation(audio_input) -> str:
     Enhanced speech processing function with file validation.
     This will be replaced with actual GCP Speech-to-Text integration.
     """
-    if audio_input is None:
-        return """🎤 **Welcome to Speech-to-Text!**
+    try:
+        if audio_input is None:
+            return """🎤 **Welcome to Speech-to-Text!**
 
 Please upload an audio file or use the microphone to record audio.
 
 **📋 Instructions:**
-1. Click "Upload" to select an audio file from your device
-2. Or click "Record" to capture audio directly  
-3. Supported formats: WAV, MP3, M4A, OGG, FLAC, AAC, WMA
-4. Maximum file size: 100MB
+1. **Upload**: Click "Upload" to select an audio file from your device
+2. **Record**: Click "Record" to capture audio directly using your microphone
+3. **Edit Audio**: Use the ✂️ edit icon to trim the audio to specific segments
+4. **Timeline**: Use the timeline scrubber to navigate through the audio
 
-**🎯 What happens next:**
+**✅ Supported formats:** WAV, MP3, M4A, OGG, FLAC, AAC, WMA  
+**📊 Maximum file size:** 100MB
+
+**🎯 Audio Editing Features:**
+• **✂️ Edit Icon**: Click to trim audio to a specific time range
+• **🎵 Timeline Scrubber**: Drag to navigate to different parts of the audio
+• **▶️ Play Controls**: Standard play/pause/volume controls
+
+**⚡ What happens when you click Submit:**
 • File validation and format checking
-• Audio information extraction  
+• Audio information extraction
 • Mock transcription (Step 3 will add real GCP integration)"""
-    
-    # Validate the uploaded file
-    is_valid, validation_message = validate_audio_file(audio_input)
-    
-    if not is_valid:
-        return f"""❌ **Validation Failed**
+        
+        # Validate the uploaded file
+        is_valid, validation_message = validate_audio_file(audio_input)
+        
+        if not is_valid:
+            return f"""❌ **File Validation Failed**
 
 {validation_message}
 
@@ -111,29 +120,55 @@ Please upload an audio file or use the microphone to record audio.
 • Ensure file size is under 100MB
 • Try converting to WAV or MP3 if issues persist
 
-**✅ Supported formats:** {', '.join(sorted(SUPPORTED_AUDIO_FORMATS))}"""
-    
-    # Get detailed audio file information
-    audio_info = get_audio_info(audio_input)
-    info_display = format_audio_info(audio_info)
-    
-    # Mock transcription response with enhanced file info
-    return f"""✅ **File Validation Successful!**
+**✅ Supported formats:** {', '.join(sorted(SUPPORTED_AUDIO_FORMATS))}
+
+**💡 Note about audio editing:**
+• The ✂️ edit icon allows you to trim the audio before processing
+• The timeline scrubber helps you find the exact segment you want to transcribe
+• You can select a portion of the audio to reduce processing time"""
+        
+        # Get detailed audio file information
+        audio_info = get_audio_info(audio_input)
+        info_display = format_audio_info(audio_info)
+        
+        # Mock transcription response with enhanced file info
+        return f"""✅ **File Processing Successful!**
 
 {info_display}
 
 {validation_message}
 
-🎙️ **Mock Transcription:**
+🎙️ **Mock Transcription Result:**
 "This is a placeholder transcription result. The audio file '{audio_info['filename']}' has been successfully validated and analyzed. File size: {audio_info['size_mb']:.1f}MB. The system is ready for processing with Google Cloud Speech-to-Text API."
 
 🔧 **Processing Status:** 
 • ✅ File uploaded and validated
 • ✅ Audio information extracted  
+• ✅ Audio editing features available (✂️ trim, 🎵 scrubber)
 • ✅ Ready for speech recognition (Step 3)
-• 🎵 Audio preview: Available in browser player above
 
-� **Next Steps:** Integration with Google Cloud Speech-to-Text API will provide actual transcription results."""
+💡 **Audio Editing Tips:**
+• Use the ✂️ edit icon to trim to the most important audio segments
+• Navigate with the timeline scrubber to find specific parts
+• Shorter audio segments = faster processing and better accuracy
+
+🚀 **Next Steps:** Integration with Google Cloud Speech-to-Text API will provide actual transcription results."""
+        
+    except Exception as e:
+        return f"""❌ **Unexpected Error**
+
+An error occurred while processing your audio file: {str(e)}
+
+**🔧 Troubleshooting Steps:**
+1. Try uploading a different audio file
+2. Check that the file isn't corrupted
+3. Ensure the file format is supported
+4. Verify the file size is under 100MB
+
+**✅ Supported formats:** {', '.join(sorted(SUPPORTED_AUDIO_FORMATS))}
+
+**🆘 If the problem persists:**
+Please check the console for additional error details or try restarting the application."""
 
 def create_speech_interface() -> gr.Interface:
     """
@@ -155,16 +190,21 @@ def create_speech_interface() -> gr.Interface:
             lines=12,
             placeholder="Upload an audio file to see transcription results and file information..."
         ),
-        title="🎙️ Speech-to-Text UI with Enhanced Audio Preview",
+        title="🎙️ Speech-to-Text UI with Audio Editing & Preview",
         description=f"""
         Upload an audio file or record directly to get started with speech transcription.
         
-        **✅ Supported formats:** {', '.join(sorted(SUPPORTED_AUDIO_FORMATS))}  
-        **📊 Maximum file size:** 100MB  
-        **🎵 Audio preview:** Built-in player for uploaded files  
-        **📋 File info:** Detailed information display  
+        **📁 File Support:**
+        • **Formats:** {', '.join(sorted(SUPPORTED_AUDIO_FORMATS))}  
+        • **Max Size:** 100MB  
         
-        The interface will validate your file and provide detailed feedback before processing.
+        **🎵 Audio Features:**
+        • **Upload/Record:** Choose file or record live audio
+        • **✂️ Edit/Trim:** Click edit icon to select specific audio segments
+        • **🎵 Timeline:** Drag scrubber to navigate through audio
+        • **▶️ Preview:** Built-in player with standard controls
+        
+        **⚡ Processing:** File validation → Information display → Mock transcription
         """,
         examples=None,  # We'll add example files later
         allow_flagging="never"
