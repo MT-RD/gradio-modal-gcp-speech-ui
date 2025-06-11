@@ -1,6 +1,6 @@
 # Makefile for Gradio Modal GCP Speech UI
 
-.PHONY: help setup install check-env test lint format clean run dev
+.PHONY: help setup install check-env test lint format clean run dev deploy-modal deploy-hf
 
 # Default target
 help:
@@ -89,4 +89,23 @@ dev:
 	@echo "🔧 Starting development server with auto-reload..."
 	@python3 -m gradio src/app.py --reload
 
-# TODO: Add deployment commands (deploy-modal, deploy-hf)
+# Deploy to Modal
+deploy-modal:
+	@echo "🚀 Deploying to Modal..."
+	@echo "🔍 Checking Modal authentication..."
+	@modal token list || (echo "❌ Modal not authenticated. Run 'modal token new' first." && exit 1)
+	@echo "📦 Deploying application..."
+	@modal deploy src/modal_app.py
+	@echo "✅ Deployment to Modal complete"
+
+# Deploy to HuggingFace Spaces
+deploy-hf:
+	@echo "🤗 Deploying to HuggingFace Spaces..."
+	@echo "🔍 Checking git configuration..."
+	@git status > /dev/null 2>&1 || (echo "❌ Not a git repository. Initialize with 'git init' first." && exit 1)
+	@echo "📦 Pushing to HuggingFace Spaces..."
+	@echo "ℹ️  Make sure you've set up HF Spaces remote: git remote add hf https://huggingface.co/spaces/YOUR_USERNAME/YOUR_SPACE_NAME"
+	@git add -A
+	@git commit -m "Deploy to HuggingFace Spaces - $(shell date '+%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
+	@git push hf main || (echo "❌ Push failed. Check HF remote configuration." && exit 1)
+	@echo "✅ Deployment to HuggingFace Spaces complete"
