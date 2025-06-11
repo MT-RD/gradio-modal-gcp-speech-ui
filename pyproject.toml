@@ -1,0 +1,9 @@
+# PyProject.toml - Modern Python Project Configuration
+# Gradio Modal GCP Speech UI
+
+# TODO: Add project metadata (name, version, description, authors, etc.)
+# TODO: Add core dependencies (Gradio, Modal, Google Cloud, audio libraries)
+# TODO: Add optional dependencies (dev tools, HuggingFace integration)
+# TODO: Add project URLs and build system configuration
+# TODO: Add code formatting tools configuration (Black, isort)
+# TODO: Add type checking and testing configuration (mypy, pytest)
