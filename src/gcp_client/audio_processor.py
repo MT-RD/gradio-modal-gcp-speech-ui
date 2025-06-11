@@ -10,6 +10,9 @@ import logging
 from typing import Tuple, Optional, Dict, Any
 from pathlib import Path
 
+import librosa
+import numpy as np
+
 from .exceptions import AudioProcessingError, UnsupportedFormatError
 
 logger = logging.getLogger(__name__)
@@ -131,12 +134,25 @@ class AudioProcessor:
         Returns:
             Dictionary containing detailed audio analysis
         """
-        # TODO: Implement librosa-based audio analysis
-        # - Load audio file
-        # - Extract duration, sample_rate, channels
-        # - Calculate audio quality metrics
-        # - Return structured metadata
-        raise NotImplementedError("Audio content analysis not yet implemented")
+        try:
+            # Load audio file with librosa
+            # sr=None preserves original sample rate
+            # mono=False preserves original channel configuration
+            audio_data, sample_rate = librosa.load(file_path, sr=None, mono=False)
+            
+            # Return basic audio information for now
+            return {
+                'audio_loaded': True,
+                'sample_rate': int(sample_rate),
+                'audio_shape': audio_data.shape,
+                'file_path': file_path,
+                'load_method': 'librosa'
+            }
+            
+        except Exception as e:
+            logger.error(f"Failed to load audio file {file_path}: {e}")
+            raise AudioProcessingError(f"Could not analyze audio content: {e}")
+        
     
     def _validate_audio_quality(self, audio_data, sample_rate: int) -> Tuple[bool, str]:
         """
