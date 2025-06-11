@@ -37,7 +37,11 @@ class AudioProcessingError(GCPSpeechError):
 
 class UnsupportedFormatError(GCPSpeechError):
     """Raised when an unsupported audio format is encountered."""
-    pass
+    
+    def __init__(self, format_name: str):
+        message = f"Unsupported audio format: {format_name}"
+        super().__init__(message, "FORMAT_ERROR")
+        self.format_name = format_name
 
 
 class QuotaExceededError(GCPSpeechError):
