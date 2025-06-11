@@ -51,6 +51,18 @@ test:
 	@echo "🧪 Running tests..."
 	@pytest tests/ -v --cov=src --cov-report=term-missing --cov-report=html
 
+# Test audio processing functionality
+test-audio:
+	@echo "🎵 Testing audio processing..."
+	@python3 scripts/test_audio.py
+
+# Quick validation of current implementation
+validate:
+	@echo "✅ Validating current implementation..."
+	@$(MAKE) check-env
+	@$(MAKE) test-audio
+	@echo "🎉 Validation completed successfully!"
+
 # Format code
 format:
 	@echo "🎨 Formatting code..."
