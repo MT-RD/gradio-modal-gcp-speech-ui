@@ -29,7 +29,10 @@ class AuthenticationError(GCPSpeechError):
 
 class AudioProcessingError(GCPSpeechError):
     """Raised when audio processing fails."""
-    pass
+    
+    def __init__(self, message: str, original_error: Exception = None):
+        super().__init__(message, "AUDIO_ERROR")
+        self.original_error = original_error
 
 
 class UnsupportedFormatError(GCPSpeechError):
