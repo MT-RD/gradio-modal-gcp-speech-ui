@@ -54,10 +54,33 @@ fi
 
 # Check if FFmpeg is installed (required for audio processing)
 if ! command -v ffmpeg &> /dev/null; then
-    echo "⚠️ FFmpeg is not installed. Please install FFmpeg for audio processing:"
-    echo "   macOS: brew install ffmpeg"
-    echo "   Ubuntu: sudo apt-get install ffmpeg"
-    echo "   Windows: Download from https://ffmpeg.org/download.html"
+    echo "⚠️ FFmpeg is not installed but is required for audio processing."
+    
+    # Try to install FFmpeg automatically on macOS
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        if command -v brew &> /dev/null; then
+            echo "🔄 Installing FFmpeg using Homebrew..."
+            brew install ffmpeg
+            if command -v ffmpeg &> /dev/null; then
+                echo "✅ FFmpeg successfully installed"
+            else
+                echo "❌ FFmpeg installation failed. Please install manually:"
+                echo "   brew install ffmpeg"
+                exit 1
+            fi
+        else
+            echo "❌ Homebrew not found. Please install FFmpeg manually:"
+            echo "   Install Homebrew: /bin/bash -c \"\$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\""
+            echo "   Then run: brew install ffmpeg"
+            exit 1
+        fi
+    else
+        echo "   Please install FFmpeg for your system:"
+        echo "   Ubuntu/Debian: sudo apt-get install ffmpeg"
+        echo "   CentOS/RHEL: sudo yum install ffmpeg"
+        echo "   Windows: Download from https://ffmpeg.org/download.html"
+        exit 1
+    fi
 else
     echo "✅ FFmpeg detected"
 fi
