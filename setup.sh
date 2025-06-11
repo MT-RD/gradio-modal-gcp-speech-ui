@@ -52,6 +52,32 @@ else
     echo "✅ .env file already exists"
 fi
 
-# TODO: Add FFmpeg check and completion message
+# Check if FFmpeg is installed (required for audio processing)
+if ! command -v ffmpeg &> /dev/null; then
+    echo "⚠️ FFmpeg is not installed. Please install FFmpeg for audio processing:"
+    echo "   macOS: brew install ffmpeg"
+    echo "   Ubuntu: sudo apt-get install ffmpeg"
+    echo "   Windows: Download from https://ffmpeg.org/download.html"
+else
+    echo "✅ FFmpeg detected"
+fi
 
-echo "🔧 Setup script skeleton ready for incremental implementation..."
+echo ""
+echo "🎉 Setup complete!"
+echo ""
+echo "Next steps:"
+echo "1. Edit .env file with your configuration:"
+echo "   - Add your Google Cloud credentials path"
+echo "   - Add your Modal API token"
+echo "   - Configure other settings as needed"
+echo ""
+echo "2. Follow the Google Cloud setup guide:"
+echo "   docs/setup/gcp-setup.md (will be created in next commit)"
+echo ""
+echo "3. Activate the virtual environment:"
+echo "   source venv/bin/activate"
+echo ""
+echo "4. Run the application (when implemented):"
+echo "   python src/gradio_app/app.py"
+echo ""
+echo "🔍 For more information, see README.md"
