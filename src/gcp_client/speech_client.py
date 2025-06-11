@@ -146,9 +146,32 @@ class SpeechToTextClient:
         Returns:
             True if service is available and authenticated
         """
-        # Skeleton implementation - always return True for now
-        logger.info("Checking GCP availability (skeleton)")
-        return True
+        try:
+            # Try to authenticate and get client
+            self._get_client()
+            logger.info("GCP Speech-to-Text service is available")
+            return True
+        except AuthenticationError as e:
+            logger.warning(f"GCP Speech service not available - authentication failed: {e}")
+            return False
+        except Exception as e:
+            logger.warning(f"GCP Speech service not available: {e}")
+            return False
+    
+    def get_authentication_status(self) -> Dict[str, Any]:
+        """
+        Get detailed authentication status information.
+        
+        Returns:
+            Dictionary containing authentication details
+        """
+        return {
+            'is_authenticated': self._is_authenticated,
+            'credentials_validated': self._credentials_validated,
+            'credentials_path': self.credentials_path or os.getenv('GOOGLE_APPLICATION_CREDENTIALS'),
+            'project_id': self.project_id,
+            'client_initialized': self._client is not None
+        }
     
     def transcribe_audio(self, file_path: str, language_code: str = "en-US") -> Dict[str, Any]:
         """
