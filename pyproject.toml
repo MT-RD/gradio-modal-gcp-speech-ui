@@ -1,7 +1,29 @@
 # PyProject.toml - Modern Python Project Configuration
 # Gradio Modal GCP Speech UI
 
-# TODO: Add project metadata (name, version, description, authors, etc.)
+[project]
+name = "gradio-modal-gcp-speech-ui"
+version = "0.1.0"
+description = "Gradio-powered Speech-to-Text UI with Google Cloud STT and Modal deployment"
+authors = [
+    {name = "Manoj T", email = "your.email@example.com"}
+]
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.8"
+keywords = ["gradio", "modal", "speech-to-text", "google-cloud", "asr"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
 # TODO: Add core dependencies (Gradio, Modal, Google Cloud, audio libraries)
 # TODO: Add optional dependencies (dev tools, HuggingFace integration)
 # TODO: Add project URLs and build system configuration
