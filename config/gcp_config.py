@@ -22,7 +22,34 @@ class GCPConfig:
         "model": "latest_long",  # Best for longer audio files
     }
     
-    # TODO: Add Audio format configurations  
+    # Audio format configurations
+    FORMAT_CONFIGS = {
+        "wav": {
+            "encoding": "LINEAR16",
+            "sample_rate_hertz": None,  # Auto-detect
+        },
+        "mp3": {
+            "encoding": "MP3",
+            "sample_rate_hertz": None,  # Auto-detect
+        },
+        "m4a": {
+            "encoding": "MP3",  # M4A often uses AAC, but MP3 encoding works for most cases
+            "sample_rate_hertz": None,
+        },
+        "flac": {
+            "encoding": "FLAC",
+            "sample_rate_hertz": None,
+        },
+        "ogg": {
+            "encoding": "OGG_OPUS",
+            "sample_rate_hertz": 48000,  # Common for OGG Opus
+        },
+        "webm": {
+            "encoding": "WEBM_OPUS",
+            "sample_rate_hertz": 48000,  # Common for WebM Opus
+        },
+    }
+    
     # TODO: Add Supported language codes
     # TODO: Add class methods for configuration handling
     # TODO: Add file size and duration limits
