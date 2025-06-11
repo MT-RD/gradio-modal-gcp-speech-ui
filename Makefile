@@ -1,6 +1,6 @@
 # Makefile for Gradio Modal GCP Speech UI
 
-.PHONY: help
+.PHONY: help setup install check-env
 
 # Default target
 help:
@@ -25,7 +25,27 @@ help:
 	@echo "  deploy-modal   - Deploy to Modal"
 	@echo "  deploy-hf      - Deploy to HuggingFace Spaces"
 
-# TODO: Add environment setup commands (setup, install)
+# Setup development environment
+setup:
+	@echo "🔧 Setting up development environment..."
+	@chmod +x setup.sh
+	@./setup.sh
+
+# Install dependencies
+install:
+	@echo "📦 Installing dependencies..."
+	@pip install -r requirements.txt
+
+# Check environment configuration
+check-env:
+	@echo "🔍 Checking environment configuration..."
+	@if [ ! -f .env ]; then \
+		echo "❌ .env file not found. Copy .env.example to .env and configure it."; \
+		exit 1; \
+	fi
+	@echo "✅ .env file found"
+	@python -c "from config.settings import settings; print('✅ Configuration loaded successfully')" || echo "❌ Configuration error"
+
 # TODO: Add testing and quality commands (test, lint, format)
 # TODO: Add utility commands (clean)
 # TODO: Add development and deployment commands (dev, deploy-modal)
