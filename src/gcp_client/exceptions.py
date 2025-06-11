@@ -23,7 +23,8 @@ class GCPSpeechError(Exception):
 class AuthenticationError(GCPSpeechError):
     """Raised when authentication with Google Cloud fails."""
     
-    pass
+    def __init__(self, message: str = "Failed to authenticate with Google Cloud"):
+        super().__init__(message, "AUTH_ERROR")
 
 
 class AudioProcessingError(GCPSpeechError):
