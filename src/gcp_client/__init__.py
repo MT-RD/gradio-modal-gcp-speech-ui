@@ -1,8 +1,23 @@
 """
-GCP Client Module
+Google Cloud Speech-to-Text client module.
 
-This module contains the Google Cloud Platform Speech-to-Text client implementation.
+This module provides the interface for interacting with Google Cloud Speech-to-Text API.
 """
 
-# Placeholder for GCP STT client implementation
-# Will be implemented in Commit 2: Google Cloud Setup & Configuration
+from .speech_client import SpeechToTextClient
+from .audio_processor import AudioProcessor
+from .exceptions import (
+    GCPSpeechError,
+    AudioProcessingError,
+    AuthenticationError,
+    UnsupportedFormatError
+)
+
+__all__ = [
+    'SpeechToTextClient',
+    'AudioProcessor', 
+    'GCPSpeechError',
+    'AudioProcessingError',
+    'AuthenticationError',
+    'UnsupportedFormatError'
+]
