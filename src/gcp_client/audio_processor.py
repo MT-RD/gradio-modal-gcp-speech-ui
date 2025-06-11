@@ -135,9 +135,45 @@ class AudioProcessor:
             Dictionary containing detailed audio analysis
         """
         try:
-            # Load audio file with librosa
-            # sr=None preserves original sample rate
-            # mono=False preserves original channel configuration
+            # Check if file exists and get basic info
+            if not os.path.exists(file_path):
+                raise AudioProcessingError(f"Audio file not found: {file_path}")
+            
+            file_extension = Path(file_path).suffix.lower()
+            file_size = os.path.getsize(file_path)
+            
+            # Validate file format support
+            if file_extension not in self.SUPPORTED_FORMATS:
+                supported_formats = ', '.join(self.SUPPORTED_FORMATS.keys())
+                raise UnsupportedFormatError(
+                    f"Unsupported format {file_extension}. Supported: {supported_formats}"
+                )
+            
+            # Load audio file with graceful fallback handling
+            load_method = 'unknown'
+            try:
+                # Primary method: preserve original format
+                audio_data, sample_rate = librosa.load(file_path, sr=None, mono=False)
+                load_method = 'librosa_original'
+            except Exception as primary_error:
+                logger.warning(f"Primary loading failed for {file_path}: {primary_error}")
+                try:
+                    # Fallback: force mono conversion
+                    audio_data, sample_rate = librosa.load(file_path, sr=None, mono=True)
+                    load_method = 'librosa_mono_fallback'
+                    logger.info(f"Successfully loaded {file_path} with mono conversion")
+                except Exception as mono_error:
+                    logger.warning(f"Mono fallback failed for {file_path}: {mono_error}")
+                    try:
+                        # Last resort: default sample rate
+                        audio_data, sample_rate = librosa.load(file_path, sr=22050, mono=True)
+                        load_method = 'librosa_default_sr'
+                        logger.info(f"Successfully loaded {file_path} with default settings")
+                    except Exception as final_error:
+                        raise AudioProcessingError(
+                            f"All loading methods failed for {file_path}. "
+                            f"Final error: {final_error}"
+                        )
             audio_data, sample_rate = librosa.load(file_path, sr=None, mono=False)
             
             # Extract basic audio metrics
@@ -175,7 +211,10 @@ class AudioProcessor:
                 'min_amplitude': round(min_amplitude, 6),
                 'audio_shape': audio_data.shape,
                 'file_path': file_path,
-                'load_method': 'librosa'
+                'file_extension': file_extension,
+                'file_size_bytes': file_size,
+                'gcp_encoding': self.SUPPORTED_FORMATS.get(file_extension),
+                'load_method': load_method
             }
             
         except Exception as e:
