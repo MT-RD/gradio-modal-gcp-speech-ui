@@ -1,6 +1,6 @@
 # Makefile for Gradio Modal GCP Speech UI
 
-.PHONY: help setup install check-env test lint format clean
+.PHONY: help setup install check-env test lint format clean run dev
 
 # Default target
 help:
@@ -79,4 +79,14 @@ clean:
 	@rm -rf build/
 	@echo "✅ Cleanup complete"
 
-# TODO: Add development and deployment commands (run, dev, deploy-modal, deploy-hf)
+# Run the Gradio app locally
+run:
+	@echo "🚀 Starting Gradio app..."
+	@python3 src/app.py
+
+# Run in development mode with auto-reload
+dev:
+	@echo "🔧 Starting development server with auto-reload..."
+	@python3 -m gradio src/app.py --reload
+
+# TODO: Add deployment commands (deploy-modal, deploy-hf)
