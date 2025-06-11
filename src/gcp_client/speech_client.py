@@ -35,8 +35,109 @@ class SpeechToTextClient:
         # Client will be initialized when first used
         self._client = None
         self._is_authenticated = False
+        self._credentials_validated = False
         
-        logger.info("SpeechToTextClient initialized - skeleton version")
+        logger.info("SpeechToTextClient initialized with authentication support")
+    
+    def _validate_credentials_file(self, credentials_path: str) -> Dict[str, Any]:
+        """
+        Validate the GCP service account credentials file.
+        
+        Args:
+            credentials_path: Path to the credentials JSON file
+            
+        Returns:
+            Dictionary containing parsed credentials
+            
+        Raises:
+            AuthenticationError: If credentials file is invalid
+        """
+        try:
+            if not os.path.exists(credentials_path):
+                raise AuthenticationError(f"Credentials file not found: {credentials_path}")
+            
+            # Validate file is readable and valid JSON
+            with open(credentials_path, 'r') as f:
+                credentials = json.load(f)
+            
+            # Check for required fields in service account JSON
+            required_fields = ['type', 'project_id', 'private_key_id', 'private_key', 'client_email']
+            missing_fields = [field for field in required_fields if field not in credentials]
+            
+            if missing_fields:
+                raise AuthenticationError(f"Invalid credentials file. Missing fields: {', '.join(missing_fields)}")
+            
+            if credentials.get('type') != 'service_account':
+                raise AuthenticationError("Credentials file must be a service account key")
+            
+            logger.info(f"Credentials file validated: {credentials.get('client_email')}")
+            return credentials
+            
+        except json.JSONDecodeError as e:
+            raise AuthenticationError(f"Credentials file is not valid JSON: {e}")
+        except Exception as e:
+            raise AuthenticationError(f"Failed to validate credentials file: {e}")
+    
+    def _authenticate(self) -> bool:
+        """
+        Authenticate with Google Cloud using service account credentials.
+        
+        Returns:
+            True if authentication successful
+            
+        Raises:
+            AuthenticationError: If authentication fails
+        """
+        try:
+            # Get credentials path from instance variable or environment
+            credentials_path = self.credentials_path or os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
+            
+            if not credentials_path:
+                raise AuthenticationError(
+                    "No credentials found. Set GOOGLE_APPLICATION_CREDENTIALS environment variable "
+                    "or provide credentials_path when initializing the client"
+                )
+            
+            # Validate credentials file
+            credentials = self._validate_credentials_file(credentials_path)
+            
+            # Set environment variable for GCP SDK
+            os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credentials_path
+            
+            # Extract project ID if not provided
+            if not self.project_id:
+                self.project_id = credentials.get('project_id')
+                logger.info(f"Using project ID from credentials: {self.project_id}")
+            
+            self._is_authenticated = True
+            self._credentials_validated = True
+            
+            logger.info(f"Authentication successful for project: {self.project_id}")
+            return True
+            
+        except AuthenticationError:
+            raise
+        except Exception as e:
+            logger.error(f"Authentication failed: {e}")
+            raise AuthenticationError(f"Authentication failed: {e}")
+    
+    def _get_client(self):
+        """
+        Get or create the GCP Speech client.
+        
+        Returns:
+            Google Cloud Speech client (placeholder for now)
+        """
+        if not self._is_authenticated:
+            self._authenticate()
+        
+        if self._client is None:
+            # For now, return a placeholder
+            # In the next logical commit, we'll initialize: speech.SpeechClient()
+            self._client = "AUTHENTICATED_GCP_CLIENT_PLACEHOLDER"
+            logger.info("GCP Speech client created with authentication")
+        
+        return self._client
     
     def is_available(self) -> bool:
         """
