@@ -55,6 +55,37 @@ huggingface = [
     "datasets>=2.14.0",
 ]
 
-# TODO: Add project URLs and build system configuration
-# TODO: Add code formatting tools configuration (Black, isort)
+[project.urls]
+Homepage = "https://github.com/yourusername/gradio-modal-gcp-speech-ui"
+Repository = "https://github.com/yourusername/gradio-modal-gcp-speech-ui"
+Issues = "https://github.com/yourusername/gradio-modal-gcp-speech-ui/issues"
+
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+known_first_party = ["src"]
+
 # TODO: Add type checking and testing configuration (mypy, pytest)
