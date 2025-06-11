@@ -53,4 +53,6 @@ class QuotaExceededError(GCPSpeechError):
 class TranscriptionError(GCPSpeechError):
     """Raised when transcription fails."""
     
-    pass
+    def __init__(self, message: str, original_error: Exception = None):
+        super().__init__(message, "TRANSCRIPTION_ERROR")
+        self.original_error = original_error
