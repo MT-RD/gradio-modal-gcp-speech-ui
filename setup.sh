@@ -37,9 +37,12 @@ source venv/bin/activate
 
 # Upgrade pip
 echo "⬆️ Upgrading pip..."
-pip install --upgrade pip
+pip3 install --upgrade pip
 
-# TODO: Add dependencies installation
+# Install dependencies
+echo "📚 Installing dependencies..."
+pip3 install -r requirements.txt
+
 # TODO: Add environment file setup
 # TODO: Add FFmpeg check and completion message
 
