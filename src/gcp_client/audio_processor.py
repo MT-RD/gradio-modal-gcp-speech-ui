@@ -83,12 +83,27 @@ class AudioProcessor:
         Returns:
             Tuple of (is_valid, validation_message)
         """
-        # Skeleton implementation - basic validation only
         try:
             info = self.get_audio_info(file_path)
-            # For now, just check if file exists and has reasonable size
-            if info['size_mb'] > 100:  # Basic size check
-                return False, f"File too large ({info['size_mb']:.1f}MB)"
-            return True, f"Basic validation passed for {info['format']} file"
+            
+            # Check if format is supported
+            if not info['is_supported']:
+                supported_formats = ', '.join(self.SUPPORTED_FORMATS.keys())
+                return False, f"Unsupported format {info['format']}. Supported: {supported_formats}"
+            
+            # Check file size against GCP limits
+            if not info['max_size_async']:
+                return False, f"File too large ({info['size_mb']:.1f}MB). Maximum: 1000MB for async processing"
+            
+            # Determine processing method
+            processing_method = "synchronous" if info['max_size_sync'] else "asynchronous"
+            message = f"Valid {info['format']} file ({info['size_mb']:.1f}MB) - {processing_method} processing"
+            
+            # Add conversion note if needed
+            if info['requires_conversion']:
+                message += " (will be converted to MP3)"
+                
+            return True, message
+            
         except Exception as e:
             return False, f"Validation failed: {e}"
