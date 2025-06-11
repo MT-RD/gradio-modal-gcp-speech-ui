@@ -24,7 +24,22 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
 
-# TODO: Add core dependencies (Gradio, Modal, Google Cloud, audio libraries)
+dependencies = [
+    "gradio>=4.0.0",
+    "modal>=0.60.0",
+    "google-cloud-speech>=2.0.0",
+    "google-cloud-storage>=2.0.0",
+    "google-auth>=2.0.0",
+    "pydub>=0.25.0",
+    "librosa>=0.10.0",
+    "soundfile>=0.12.0",
+    "mutagen>=1.47.0",
+    "python-dotenv>=1.0.0",
+    "pydantic>=2.0.0",
+    "structlog>=23.0.0",
+    "rich>=13.0.0",
+]
+
 # TODO: Add optional dependencies (dev tools, HuggingFace integration)
 # TODO: Add project URLs and build system configuration
 # TODO: Add code formatting tools configuration (Black, isort)
