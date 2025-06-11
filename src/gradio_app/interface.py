@@ -5,16 +5,16 @@ Gradio interface components for the Speech-to-Text application.
 import gradio as gr
 from typing import Optional
 
-def process_speech_placeholder(audio_input: Optional[str] = None) -> str:
+def process_speech_placeholder(audio_input) -> str:
     """
     Placeholder function for speech processing.
     This will be replaced with actual GCP Speech-to-Text integration.
     """
     if audio_input is None:
-        return "🎤 Please provide an audio file or record some audio to transcribe."
+        return "🎤 Please upload an audio file or record some audio to transcribe."
     
     # Mock response for testing
-    return f"✅ Mock Transcription: This is a placeholder response for testing the UI. Audio file: {audio_input}"
+    return f"✅ Mock Transcription: This is a placeholder response for testing the UI.\n\nAudio file received: {audio_input}\n\nThis demonstrates that the interface is working correctly and ready for integration with Google Cloud Speech-to-Text API."
 
 def create_speech_interface() -> gr.Interface:
     """
@@ -24,34 +24,13 @@ def create_speech_interface() -> gr.Interface:
         gr.Interface: Configured Gradio interface
     """
     
-    # Create the interface
+    # Create the interface using simple string specification for compatibility
     interface = gr.Interface(
         fn=process_speech_placeholder,
-        inputs=[
-            gr.Audio(
-                label="🎵 Audio Input", 
-                type="filepath"
-            )
-        ],
-        outputs=[
-            gr.Textbox(
-                label="📝 Transcription Result",
-                placeholder="Your transcribed text will appear here...",
-                lines=5
-            )
-        ],
+        inputs="audio",  # Simple string specification
+        outputs="text",  # Simple string specification
         title="🎙️ Speech-to-Text UI",
-        description="""
-        ### Welcome to the Speech-to-Text Application!
-        
-        Upload an audio file or record directly to get started with speech transcription.
-        
-        **Supported formats:** WAV, MP3, M4A, OGG, FLAC
-        """,
-        theme=gr.themes.Soft() if hasattr(gr, 'themes') else None,
-        examples=[
-            # We'll add example audio files later
-        ]
+        description="Upload an audio file or record directly to get started with speech transcription."
     )
     
     return interface
