@@ -71,7 +71,8 @@ class AudioProcessor:
         file_size = os.path.getsize(file_path)
         file_extension = Path(file_path).suffix.lower()
         
-        return {
+        # Start with basic file information
+        info = {
             'filename': os.path.basename(file_path),
             'size_bytes': file_size,
             'size_mb': file_size / (1024 * 1024),
@@ -81,11 +82,30 @@ class AudioProcessor:
             'requires_conversion': file_extension in ['.m4a', '.aac', '.wma'],
             'max_size_sync': file_size <= self.MAX_FILE_SIZE_SYNC,
             'max_size_async': file_size <= self.MAX_FILE_SIZE_ASYNC,
-            # Audio details will be added when librosa is integrated
+            # Default values for audio details
             'duration_seconds': None,
             'sample_rate': None,
             'channels': None,
         }
+        
+        # Try to get detailed audio analysis
+        if info['is_supported']:
+            try:
+                audio_analysis = self._analyze_audio_content(file_path)
+                # Merge analysis results into info
+                info.update({
+                    'duration_seconds': audio_analysis.get('duration_seconds'),
+                    'sample_rate': audio_analysis.get('sample_rate'),
+                    'channels': audio_analysis.get('channels'),
+                    'load_method': audio_analysis.get('load_method'),
+                    'audio_analysis_available': True
+                })
+            except (AudioProcessingError, UnsupportedFormatError) as e:
+                logger.warning(f"Could not perform detailed audio analysis: {e}")
+                info['audio_analysis_available'] = False
+                info['analysis_error'] = str(e)
+        
+        return info
     
     def validate_audio_file(self, file_path: str) -> Tuple[bool, str]:
         """
@@ -217,9 +237,39 @@ class AudioProcessor:
                 'load_method': load_method
             }
             
+        except AudioProcessingError:
+            # Re-raise our custom errors without modification
+            raise
+        except UnsupportedFormatError:
+            # Re-raise format errors without modification
+            raise
+        except FileNotFoundError as e:
+            logger.error(f"Audio file not found: {file_path}")
+            raise AudioProcessingError(f"Audio file not found: {file_path}")
+        except PermissionError as e:
+            logger.error(f"Permission denied accessing audio file: {file_path}")
+            raise AudioProcessingError(f"Permission denied: Cannot access {file_path}")
         except Exception as e:
-            logger.error(f"Failed to load audio file {file_path}: {e}")
-            raise AudioProcessingError(f"Could not analyze audio content: {e}")
+            # Catch any unexpected errors and provide helpful context
+            error_type = type(e).__name__
+            logger.error(f"Unexpected error analyzing audio file {file_path}: {error_type}: {e}")
+            
+            # Provide user-friendly error messages based on common issues
+            if "No such file or directory" in str(e):
+                raise AudioProcessingError(f"Audio file not found: {file_path}")
+            elif "Permission denied" in str(e):
+                raise AudioProcessingError(f"Permission denied: Cannot access {file_path}")
+            elif "Invalid file format" in str(e) or "unsupported format" in str(e).lower():
+                raise UnsupportedFormatError(f"Unsupported or corrupted audio file: {file_path}")
+            elif "insufficient data" in str(e).lower() or "empty file" in str(e).lower():
+                raise AudioProcessingError(f"Audio file appears to be empty or corrupted: {file_path}")
+            else:
+                # Generic error with helpful suggestion
+                raise AudioProcessingError(
+                    f"Could not analyze audio file {file_path}. "
+                    f"Error: {error_type}: {e}. "
+                    f"Please ensure the file is a valid audio format and not corrupted."
+                )
         
     
     def _validate_audio_quality(self, audio_data, sample_rate: int) -> Tuple[bool, str]:
