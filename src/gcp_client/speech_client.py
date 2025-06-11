@@ -195,11 +195,16 @@ class SpeechToTextClient:
         # Get audio information
         audio_info = self.audio_processor.get_audio_info(file_path)
         
-        # Return skeleton mock result
+        # Return enhanced mock result with authentication info
         return {
-            "transcript": f"[SKELETON MOCK] Basic transcription for {audio_info['filename']}",
-            "confidence": 0.85,
+            "transcript": f"[AUTHENTICATED MOCK] Transcription for {audio_info['filename']} using project {self.project_id}",
+            "confidence": 0.92,
             "language_code": language_code,
             "audio_info": audio_info,
-            "processing_method": "skeleton",
+            "processing_method": "asynchronous" if not audio_info['max_size_sync'] else "synchronous",
+            "authentication": {
+                "project_id": self.project_id,
+                "authenticated": self._is_authenticated,
+                "client_type": str(type(client).__name__)
+            }
         }
