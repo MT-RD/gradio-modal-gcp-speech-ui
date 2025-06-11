@@ -18,9 +18,28 @@ logger = logging.getLogger(__name__)
 class AudioProcessor:
     """Handles audio file processing and validation for GCP Speech-to-Text."""
     
+    # Supported audio formats for GCP Speech-to-Text API
+    SUPPORTED_FORMATS = {
+        '.wav': 'LINEAR16',      # Uncompressed WAV (recommended)
+        '.flac': 'FLAC',         # Free Lossless Audio Codec
+        '.mp3': 'MP3',           # MPEG Audio Layer III
+        '.m4a': 'MP3',           # Will be converted to MP3
+        '.ogg': 'OGG_OPUS',      # Ogg container with Opus codec
+        '.aac': 'MP3',           # Will be converted to MP3
+        '.wma': 'MP3'            # Will be converted to MP3
+    }
+    
+    # GCP Speech-to-Text file size limits
+    MAX_FILE_SIZE_SYNC = 10 * 1024 * 1024      # 10MB for synchronous requests
+    MAX_FILE_SIZE_ASYNC = 1000 * 1024 * 1024   # 1GB for asynchronous requests
+    
+    # Audio quality recommendations
+    RECOMMENDED_SAMPLE_RATES = [8000, 16000, 22050, 44100, 48000]  # Hz
+    RECOMMENDED_CHANNELS = [1, 2]  # Mono or Stereo
+    
     def __init__(self):
         """Initialize the AudioProcessor."""
-        logger.info("AudioProcessor initialized - skeleton version")
+        logger.info("AudioProcessor initialized with GCP format support")
     
     def get_audio_info(self, file_path: str) -> Dict[str, Any]:
         """
@@ -32,7 +51,6 @@ class AudioProcessor:
         Returns:
             Dictionary containing audio file information
         """
-        # Skeleton implementation - will be expanded in incremental commits
         if not os.path.exists(file_path):
             raise AudioProcessingError(f"Audio file not found: {file_path}")
         
@@ -44,7 +62,15 @@ class AudioProcessor:
             'size_bytes': file_size,
             'size_mb': file_size / (1024 * 1024),
             'format': file_extension,
-            # More details will be added in subsequent commits
+            'encoding': self.SUPPORTED_FORMATS.get(file_extension),
+            'is_supported': file_extension in self.SUPPORTED_FORMATS,
+            'requires_conversion': file_extension in ['.m4a', '.aac', '.wma'],
+            'max_size_sync': file_size <= self.MAX_FILE_SIZE_SYNC,
+            'max_size_async': file_size <= self.MAX_FILE_SIZE_ASYNC,
+            # Audio details will be added when librosa is integrated
+            'duration_seconds': None,
+            'sample_rate': None,
+            'channels': None,
         }
     
     def validate_audio_file(self, file_path: str) -> Tuple[bool, str]:
