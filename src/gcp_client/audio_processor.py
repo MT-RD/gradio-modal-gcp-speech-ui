@@ -140,10 +140,39 @@ class AudioProcessor:
             # mono=False preserves original channel configuration
             audio_data, sample_rate = librosa.load(file_path, sr=None, mono=False)
             
-            # Return basic audio information for now
+            # Extract basic audio metrics
+            if audio_data.ndim == 1:
+                # Mono audio
+                channels = 1
+                total_samples = len(audio_data)
+                duration_seconds = total_samples / sample_rate
+            else:
+                # Multi-channel audio
+                channels = audio_data.shape[0]
+                total_samples = audio_data.shape[1]
+                duration_seconds = total_samples / sample_rate
+            
+            # Calculate basic audio statistics
+            if audio_data.ndim == 1:
+                rms_energy = float(librosa.feature.rms(y=audio_data)[0].mean())
+                max_amplitude = float(audio_data.max())
+                min_amplitude = float(audio_data.min())
+            else:
+                # For multi-channel, average across channels
+                rms_energy = float(librosa.feature.rms(y=audio_data.mean(axis=0))[0].mean())
+                max_amplitude = float(audio_data.max())
+                min_amplitude = float(audio_data.min())
+            
+            # Return comprehensive audio information
             return {
                 'audio_loaded': True,
                 'sample_rate': int(sample_rate),
+                'channels': channels,
+                'duration_seconds': round(duration_seconds, 3),
+                'total_samples': total_samples,
+                'rms_energy': round(rms_energy, 6),
+                'max_amplitude': round(max_amplitude, 6),
+                'min_amplitude': round(min_amplitude, 6),
                 'audio_shape': audio_data.shape,
                 'file_path': file_path,
                 'load_method': 'librosa'
