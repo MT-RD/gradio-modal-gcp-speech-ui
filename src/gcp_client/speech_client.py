@@ -184,11 +184,15 @@ class SpeechToTextClient:
         Returns:
             Dictionary containing transcription results and metadata
         """
-        # Skeleton implementation - basic validation + mock result
+        # Validate audio file
         is_valid, validation_message = self.audio_processor.validate_audio_file(file_path)
         if not is_valid:
             raise GCPSpeechError(f"Audio validation failed: {validation_message}")
         
+        # Authenticate and get client
+        client = self._get_client()
+        
+        # Get audio information
         audio_info = self.audio_processor.get_audio_info(file_path)
         
         # Return skeleton mock result
