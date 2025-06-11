@@ -1,6 +1,6 @@
 # Makefile for Gradio Modal GCP Speech UI
 
-.PHONY: help setup install check-env test lint format
+.PHONY: help setup install check-env test lint format clean
 
 # Default target
 help:
@@ -65,5 +65,18 @@ lint:
 	@mypy src/ config/
 	@echo "✅ Linting complete"
 
-# TODO: Add utility commands (clean)
+# Clean temporary files and caches
+clean:
+	@echo "🧹 Cleaning temporary files and caches..."
+	@find . -type f -name "*.pyc" -delete
+	@find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
+	@find . -type d -name "*.egg-info" -exec rm -rf {} + 2>/dev/null || true
+	@rm -rf .pytest_cache/
+	@rm -rf .coverage
+	@rm -rf htmlcov/
+	@rm -rf .mypy_cache/
+	@rm -rf dist/
+	@rm -rf build/
+	@echo "✅ Cleanup complete"
+
 # TODO: Add development and deployment commands (run, dev, deploy-modal, deploy-hf)
